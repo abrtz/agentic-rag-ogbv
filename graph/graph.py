@@ -7,10 +7,11 @@ from langgraph.graph import END, StateGraph
 from graph.chains.answer_grader import answer_grader
 from graph.chains.hallucination_grader import hallucination_grader
 from graph.chains.router import RouteQuery, question_router
+from graph.chains.topic_grader import topic_grader
 
 # import all consts (nodes names) and the nodes created
-from graph.consts import GENERATE, GRADE_DOCUMENTS, RETRIEVE, WEBSEARCH
-from graph.nodes import generate, grade_documents, retrieve, web_search
+from graph.consts import GENERATE, GRADE_DOCUMENTS, RETRIEVE, WEBSEARCH, TOPIC_GATE
+from graph.nodes import generate, grade_documents, retrieve, web_search, topic_gate
 from graph.state import GraphState
 
 
@@ -84,22 +85,50 @@ def route_question(state: GraphState) -> str:
         return RETRIEVE
 
 
+def decide_to_answer(state):
+    # if relevance True (user query is relevant to agent topic), continue to retrieve docs
+    if state["relevance"]:
+        print("--DECISION: PROCEED TO RETRIEVE DOCS")
+        return "allow"
+    else:
+        print("--DECISION: END--")
+        print(
+            f"""I can't help with that request.\n
+This assistant only provides information about:
+- online violence against women and girls,
+- the manosphere,
+- deepfakes,
+- laws and regulations related to gender-based violence,
+- measures to mitigate gender-based violence."""
+        )
+        return "deny"
+
+
 # connect everything together
 workflow = StateGraph(GraphState)
 
 # add nodes
+workflow.add_node(TOPIC_GATE, topic_gate)
 workflow.add_node(RETRIEVE, retrieve)
 workflow.add_node(GRADE_DOCUMENTS, grade_documents)
 workflow.add_node(GENERATE, generate)
 workflow.add_node(WEBSEARCH, web_search)
+# workflow.add_node("END_PRINT", end_node_nonrelevant)
 
-# # add retrieve node as entry point
-# workflow.set_entry_point(RETRIEVE)
-
-# add conditional entry point
-workflow.set_conditional_entry_point(
-    route_question, path_map={WEBSEARCH: WEBSEARCH, RETRIEVE: RETRIEVE}
+# add topic_gate as entry point
+workflow.set_entry_point(TOPIC_GATE)
+workflow.add_conditional_edges(
+    TOPIC_GATE,
+    decide_to_answer,
+    path_map={
+        "deny": END,
+        "allow": RETRIEVE,
+    },
 )
+# add conditional entry point
+# workflow.set_conditional_entry_point(
+#     route_question, path_map={WEBSEARCH: WEBSEARCH, RETRIEVE: RETRIEVE}
+# )
 workflow.add_edge(RETRIEVE, GRADE_DOCUMENTS)
 # add conditional edge
 workflow.add_conditional_edges(

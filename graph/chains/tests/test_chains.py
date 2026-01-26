@@ -8,6 +8,7 @@ from graph.chains.generation import generation_chain
 from graph.chains.hallucination_grader import GradeHallucinations, hallucination_grader
 from graph.chains.retrieval_grader import GradeDocuments, retrieval_grader
 from graph.chains.router import RouteQuery, question_router
+from graph.chains.topic_grader import TopicGate, topic_grader
 from ingestion import retriever
 
 
@@ -90,3 +91,19 @@ def test_router_to_websearch() -> None:
     # invoke router question chain to get RouteQuery obj
     res: RouteQuery = question_router.invoke({"question": question})
     assert res.datasource == "websearch"
+
+
+def test_topic_grader_answer_yes() -> None:
+    question = "online violence against women"
+
+    # run topic grader chain with user query - result should be 'yes'
+    res: TopicGate = topic_grader.invoke({"question": question})
+    assert res.binary_score == "yes"
+
+
+def test_topic_grader_answer_no() -> None:
+    question = "crochet"
+
+    # run topic grader chain with out of topic user query - result should be 'no'
+    res: TopicGate = topic_grader.invoke({"question": question})
+    assert res.binary_score == "no"
