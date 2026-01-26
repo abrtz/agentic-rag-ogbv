@@ -113,7 +113,6 @@ workflow.add_node(RETRIEVE, retrieve)
 workflow.add_node(GRADE_DOCUMENTS, grade_documents)
 workflow.add_node(GENERATE, generate)
 workflow.add_node(WEBSEARCH, web_search)
-# workflow.add_node("END_PRINT", end_node_nonrelevant)
 
 # add topic_gate as entry point
 workflow.set_entry_point(TOPIC_GATE)
@@ -121,8 +120,8 @@ workflow.add_conditional_edges(
     TOPIC_GATE,
     decide_to_answer,
     path_map={
-        "deny": END,
-        "allow": RETRIEVE,
+        "deny": END, #if topic not relevant, end graph 
+        "allow": RETRIEVE, #if relevant, continue
     },
 )
 # add conditional entry point
