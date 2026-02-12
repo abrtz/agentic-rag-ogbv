@@ -7,11 +7,24 @@ from langgraph.graph import END, StateGraph
 from graph.chains.answer_grader import answer_grader
 from graph.chains.hallucination_grader import hallucination_grader
 from graph.chains.router import RouteQuery, question_router
-from graph.chains.topic_grader import topic_grader
 
 # import all consts (nodes names) and the nodes created
-from graph.consts import GENERATE, GRADE_DOCUMENTS, RETRIEVE, WEBSEARCH, TOPIC_GATE
-from graph.nodes import generate, grade_documents, retrieve, web_search, topic_gate
+from graph.consts import (
+    GENERATE,
+    GRADE_DOCUMENTS,
+    RETRIEVE,
+    WEBSEARCH,
+    FILTER_TOPIC,
+    REJECT,
+)
+from graph.nodes import (
+    generate,
+    grade_documents,
+    retrieve,
+    web_search,
+    filter_topic,
+    reject,
+)
 from graph.state import GraphState
 
 
@@ -92,15 +105,6 @@ def decide_to_answer(state):
         return "allow"
     else:
         print("--DECISION: END--")
-        print(
-            f"""I can't help with that request.\n
-This assistant only provides information about:
-- online violence against women and girls,
-- the manosphere,
-- deepfakes,
-- laws and regulations related to gender-based violence,
-- measures to mitigate gender-based violence."""
-        )
         return "deny"
 
 
@@ -108,20 +112,21 @@ This assistant only provides information about:
 workflow = StateGraph(GraphState)
 
 # add nodes
-workflow.add_node(TOPIC_GATE, topic_gate)
+workflow.add_node(FILTER_TOPIC, filter_topic)
+workflow.add_node(REJECT, reject)
 workflow.add_node(RETRIEVE, retrieve)
 workflow.add_node(GRADE_DOCUMENTS, grade_documents)
 workflow.add_node(GENERATE, generate)
 workflow.add_node(WEBSEARCH, web_search)
 
-# add topic_gate as entry point
-workflow.set_entry_point(TOPIC_GATE)
+# add filter_topic as entry point
+workflow.set_entry_point(FILTER_TOPIC)
 workflow.add_conditional_edges(
-    TOPIC_GATE,
+    FILTER_TOPIC,
     decide_to_answer,
     path_map={
-        "deny": END, #if topic not relevant, end graph 
-        "allow": RETRIEVE, #if relevant, continue
+        "deny": REJECT,  # if topic not relevant, generate reject response
+        "allow": RETRIEVE,  # if relevant, continue
     },
 )
 # add conditional entry point
@@ -151,6 +156,7 @@ workflow.add_conditional_edges(
 
 workflow.add_edge(WEBSEARCH, GENERATE)
 workflow.add_edge(GENERATE, END)  # last edge
+workflow.add_edge(REJECT, END)
 
 app = workflow.compile()
 app.get_graph().draw_mermaid_png(output_file_path="graph.png")

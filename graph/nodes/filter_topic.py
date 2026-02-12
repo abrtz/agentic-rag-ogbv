@@ -4,7 +4,7 @@ from graph.chains.topic_grader import topic_grader
 from graph.state import GraphState
 
 
-def topic_gate(state: GraphState) -> Dict[str, Any]:
+def filter_topic(state: GraphState) -> Dict[str, Any]:
     """
     Determine whether the user query is relevant to allowed topics.
     If it is not, return answer to user.
@@ -36,4 +36,4 @@ def topic_gate(state: GraphState) -> Dict[str, Any]:
 
 
 if __name__ == "__main__":
-    topic_gate(state={"question": "crochet"})
+    filter_topic(state={"question": "crochet"})
