@@ -46,20 +46,3 @@ def run_llm(question: str) -> Dict[str, Any]:
         "generation": state["generation"],
         "source": sources,
     }
-
-
-# def main():
-#     print("Hello Advanced RAG")
-#     print(
-#         app.invoke(
-#             input={
-#                 # "question": "what forms of online violence are women facing online in 2025?"
-#                 # "question": "what is online violence against women?"
-#                 "question": "how to make pizza?"
-#             }
-#         )
-#     )
-
-
-# if __name__ == "__main__":
-#     main()
