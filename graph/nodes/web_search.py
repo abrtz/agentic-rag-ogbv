@@ -11,27 +11,30 @@ web_search_tool = TavilySearch(max_results=3)
 def web_search(state: GraphState) -> Dict[str, Any]:
     print("--WEB SEARCH--")
     question = state["question"]
-    if "documents" in state:  # if the route to web search gives error in first run
-        documents = state["documents"]
-    else:
-        documents = None
+    documents = state.get("documents", [])
+    attempts = state.get("web_search_attempts", 0) + 1
 
     tavily_results = web_search_tool.invoke({"query": question})["results"]
-    # after getting the list of docs, take content from all elements and combine into one LangChain document
-    joined_tavily_result = "\n".join(
-        [tavily_result["content"] for tavily_result in tavily_results]
-    )
-    web_results = Document(page_content=joined_tavily_result)
-    # if we have document in our state, append relevent documents to documents list
-    if documents is not None:
-        documents.append(web_results)
-    # if no relevant docs were found, append the web_results
-    else:
-        documents = [web_results]
+
+    # create a list to store documents resulting from web search
+    web_documents = []
+    for result in tavily_results:
+        # make a LangChain document for each web result and add metadata for source extraction in UI
+        doc = Document(
+            page_content=result["content"],
+            metadata={
+                "source": result.get("url"),
+                "title": result.get("title"),
+            },
+        )
+        web_documents.append(doc)
+
+    documents.extend(web_documents)
 
     return {
         "documents": documents,
         "question": question,
+        "web_search_attempts": attempts,
     }  # return updated state of graph execution with documents and the original question
 
 

@@ -63,15 +63,21 @@ def grade_generation_grounded_in_documents_and_question(state: GraphState) -> st
         print("--DECISION: GENERATION IS GROUNDED IN DOCUMENTS--")
         # grade generation to whether it answers question or not
         print("--GRADE GENERATION vs. QUESTION--")
-        score = answer_grader.invoke({"question": question, "generation": generation})
-        # if answer_grade score is true, generation does address the question
-        if answer_grade := score.binary_score:
+        answer_score = answer_grader.invoke(
+            {"question": question, "generation": generation}
+        )
+        # if answer_grader score is true, generation does address the question
+        if answer_score.binary_score:
             print("--DECISION: GENERATION ADDRESSES THE QUESTION--")
             return "useful"  # for LangGraph mapping
-        # if answer does not address question, but it is grounded in docs
+        # if answer is ground in docs but does not address question
         else:
             print("--DECISION: GENERATION DOES NOT ADDRESS THE QUESTION--")
-            return "not useful"  # info from vector store not sufficent to answer question so we use external search
+            # stop after 3 web searches
+            if state.get("web_search_attempts", 0) >= 3:
+                print("--MAX SEARCH ATTEMPTS REACHED: RETURN BEST EFFORT--")
+                return "useful"  # force exit to END
+            return "not useful"  # info from vector store not sufficent to answer question so use external search
 
     # if answer is not even grounded in docs, we regenerate it again from docs
     else:
