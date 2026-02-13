@@ -18,6 +18,8 @@ This app answers questions about online gender-based violence against women and 
 - Hallucination grading
 - Answer relevance grading
 
+Author: Ariana Britez
+
 ## Live App
 
 **Try it here**: [RespectHer Chatbot](https://agentic-rag-ogbv.streamlit.app) (no setup required)
@@ -53,8 +55,8 @@ and stops safely after a bounded number of attempts.
 
 - [UN Women Articles](https://www.unwomen.org/en/articles/)
 - [UN Women News](https://www.unwomen.org/en/news-stories/)
-- [Report](https://www.unwomen.org/sites/default/files/2025-06/normative-advances-on-technology-facilitated-violence-against-women-and-girls-en.pdf): Normative Advances on Technology-Facilitated Violence Against Women and Girls
-- [Paper](https://www.isdglobal.org/wp-content/uploads/2023/09/Misogynistic-Pathways-to-Radicalisation-Recommended-Measures-for-Platforms-to-Assess-and-Mitigate-Online-Gender-Based-Violence.pdf): Misogynistic Pathways to Radicalisation
+- [Report](https://www.unwomen.org/sites/default/files/2025-06/normative-advances-on-technology-facilitated-violence-against-women-and-girls-en.pdf): Normative Advances on Technology-Facilitated Violence Against Women and Girls (UN Women, 2025)
+- [Paper](https://www.isdglobal.org/wp-content/uploads/2023/09/Misogynistic-Pathways-to-Radicalisation-Recommended-Measures-for-Platforms-to-Assess-and-Mitigate-Online-Gender-Based-Violence.pdf): Misogynistic Pathways to Radicalisation (Bundtzen, 2023)
 - Web search by [Taviliy](https://www.tavily.com)
 
 ## Run Locally
