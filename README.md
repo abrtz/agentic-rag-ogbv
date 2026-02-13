@@ -4,15 +4,14 @@ Agentic RAG chatbot application that addresses question and provides information
 
 ## Overview
 
-This repository contains the code that support the Streamlit chatbot application of **RespectHer**.
-Agentic Retrival-Augmented Generation (RAG) app built with:
+This repository contains the code that supports the Streamlit chatbot application **RespectHer**, an agentic Retrival-Augmented Generation (RAG) app built with:
 - LangGraph
 - LangChain
 - OpenAI
 - Tavily Web Search
 - Streamlit
 
-This system answers questions about online gender-based violence against women and girls (OGBV) using:
+This app answers questions about online gender-based violence against women and girls (OGBV) using:
 - Question topic relevance grading
 - Vector database
 - Web search fallback
@@ -34,8 +33,8 @@ This system answers questions about online gender-based violence against women a
 checks hallucinations, 
 verifies if the answer addresses the question, 
 retries generation if necessary, 
-stops safely after a bounded number of attempts.
-* Source Attribution: All answers include source URLs extracted from document metadata.
+and stops safely after a bounded number of attempts.
+* Source Attribution: All AI generated answers include source URLs extracted from document metadata.
 
 ## Architecture
 
