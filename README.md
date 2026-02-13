@@ -2,6 +2,8 @@
 
 Agentic RAG chatbot application that addresses question and provides information on online gender-based violence against women ang girls.
 
+Author: Ariana Britez
+
 ## Overview
 
 This repository contains the code that supports the Streamlit chatbot application **RespectHer**, an agentic Retrival-Augmented Generation (RAG) app built with:
@@ -17,8 +19,6 @@ This app answers questions about online gender-based violence against women and 
 - Web search fallback
 - Hallucination grading
 - Answer relevance grading
-
-Author: Ariana Britez
 
 ## Live App
 
