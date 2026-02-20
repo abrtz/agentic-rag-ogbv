@@ -19,13 +19,13 @@ with st.sidebar:
         # if button is clicked, clear chat (messages in session state)
         st.session_state.pop("messages", None)
         # refresh app
-        st.rerun
+        st.rerun()
 
     st.markdown("---")
 
     # add info about the app
     st.subheader(":violet[About]")
-    st.sidebar.markdown(
+    st.markdown(
         f"""**RespectHer** is an agentic RAG application that provides information about
     online violence against women and girls, the manosphere, deepfakes, 
     laws and regulations related to gender-based violence,
@@ -36,8 +36,8 @@ with st.sidebar:
 
     st.markdown("---")
 
-    st.sidebar.header(":violet[Resources]")
-    st.sidebar.markdown(
+    st.header(":violet[Resources]")
+    st.markdown(
         """
     - [UN Women Articles](https://www.unwomen.org/en/articles/)
     - [UN Women News](https://www.unwomen.org/en/news-stories/)
