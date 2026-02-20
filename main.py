@@ -14,7 +14,35 @@ st.title(
 
 # ---sidebar---
 with st.sidebar:
-    st.subheader(":violet[Chat session]")
+    # add google icons
+    st.markdown(
+        """
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <style>
+    .material-symbols-outlined {
+        font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 20;
+        vertical-align: middle;
+    }
+    </style>
+    """,
+        unsafe_allow_html=True,
+    )
+
+    # subheader with icon
+    st.markdown(
+        """
+    <h3 style="color:#5B197B;">
+        <span class="material-symbols-outlined">smart_toy</span>
+        Chat Session
+    </h3>
+    """,
+        unsafe_allow_html=True,
+    )
+    # st.subheader(":violet[Chat session]")
     if st.button("Clear chat", use_container_width=True):
         # if button is clicked, clear chat (messages in session state)
         st.session_state.pop("messages", None)
@@ -24,7 +52,15 @@ with st.sidebar:
     st.markdown("---")
 
     # add info about the app
-    st.subheader(":violet[About]")
+    st.markdown(
+        """
+    <h3 style="color:#5B197B;">
+        <span class="material-symbols-outlined">info</span>
+        About
+    </h3>
+    """,
+        unsafe_allow_html=True,
+    )
     st.markdown(
         f"""**RespectHer** is an agentic RAG application that provides information about
     online violence against women and girls, the manosphere, deepfakes, 
@@ -35,8 +71,15 @@ with st.sidebar:
     st.markdown("Author: [Ariana Britez](https://github.com/abrtz)")
 
     st.markdown("---")
-
-    st.header(":violet[Resources]")
+    st.markdown(
+        """
+    <h3 style="color:#5B197B;">
+        <span class="material-symbols-outlined">library_books</span>
+        Resources
+    </h3>
+    """,
+        unsafe_allow_html=True,
+    )
     st.markdown(
         """
     - [UN Women Articles](https://www.unwomen.org/en/articles/)
