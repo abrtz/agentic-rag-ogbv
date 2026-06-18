@@ -3,6 +3,7 @@ from langchain_community.document_loaders import PyPDFLoader, WebBaseLoader
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from pathlib import Path
 
 load_dotenv()
 
@@ -14,13 +15,16 @@ urls = [
     "https://www.unwomen.org/en/articles/glossary/glossary-the-manosphere",
 ]
 
-pdfs = [
-    "https://www.unwomen.org/sites/default/files/2025-06/normative-advances-on-technology-facilitated-violence-against-women-and-girls-en.pdf",
-    "https://www.isdglobal.org/wp-content/uploads/2023/09/Misogynistic-Pathways-to-Radicalisation-Recommended-Measures-for-Platforms-to-Assess-and-Mitigate-Online-Gender-Based-Violence.pdf",
-]
+# pdfs = [
+#     "https://www.unwomen.org/sites/default/files/2025-06/normative-advances-on-technology-facilitated-violence-against-women-and-girls-en.pdf",
+#     "https://www.isdglobal.org/wp-content/uploads/2023/09/Misogynistic-Pathways-to-Radicalisation-Recommended-Measures-for-Platforms-to-Assess-and-Mitigate-Online-Gender-Based-Violence.pdf",
+# ]
+
+pdf_dir = Path("data")
+
 # load urls and pdfs
 docs = [WebBaseLoader(url).load() for url in urls] + [
-    PyPDFLoader(pdf).load() for pdf in pdfs
+    PyPDFLoader(pdf).load() for pdf in pdf_dir.glob("*.pdf")
 ]
 
 # create a list of unified docs
